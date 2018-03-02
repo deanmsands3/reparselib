@@ -52,6 +52,13 @@ HANDLE OpenFileForRead(IN LPCWSTR sFileName, IN BOOL bBackup)
     : FILE_FLAG_OPEN_REPARSE_POINT, 0);
 }
 
+REPARSELIB_API wchar_t *ConvertCharArrayToLPCWSTR(const char* charArray)
+{
+    wchar_t* wString=new wchar_t[4096];
+    MultiByteToWideChar(CP_ACP, 0, charArray, -1, wString, 4096);
+    return wString;
+}
+
 /**
  *  @brief      Checks an existence of a Reparse Point of a specified file
  *  @param[in]  sFileName File name
