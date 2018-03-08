@@ -8,7 +8,7 @@ extern "C" {
 	
 	_Bool GetReparseBuffer(char const* path);
 	_Bool GetReparseGUID(char const* path);
-	_Bool GetReparseTag(char const* path);
+	_Bool GetReparseTag(char const* path, long* tag);
 	
 	_Bool DeleteReparsePoint(char const* path);
 	_Bool CreateCustomReparsePoint(char const* path, void* buffer, int size, int guid, long tag);
