@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "reparselib.h" 
+#include "../reparselib/include/stdafx.h"
+#include "../reparselib/include/reparselib.h"
 
 int main() {
 

@@ -5,10 +5,10 @@
  *  @date     July 2011
  */
 
-#include "stdafx.h"
+#include "include/stdafx.h"
 #include <ks.h> // because of GUID_NULL
 #include <string> //wmemcpy
-#include "reparselib.h"
+#include "include/reparselib.h"
 
 static BOOL CreateLinkInternal(LPCWSTR sLinkName, LPCWSTR sPrintName, LPCWSTR sSubstituteName,
   BOOL bRelative, BOOL bJunction);

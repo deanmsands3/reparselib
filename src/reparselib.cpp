@@ -5,9 +5,9 @@
  *  @date     May 2011
  */
 
-#include "stdafx.h"
+#include "include/stdafx.h"
 #include <ks.h> // because of GUID_NULL
-#include "reparselib.h"
+#include "include/reparselib.h"
 
 /**
  *@brief Get restore privilege in case we don't have it.
