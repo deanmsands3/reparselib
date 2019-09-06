@@ -5,10 +5,10 @@
  *  @date     July 2011
  */
 
-#include "include/stdafx.h"
+#include <stdafx.h>
 #include <ks.h> // because of GUID_NULL
 #include <string> //wmemcpy
-#include "include/reparselib.h"
+#include <reparselib.h>
 
 static BOOL CreateLinkInternal(LPCWSTR sLinkName, LPCWSTR sPrintName, LPCWSTR sSubstituteName,
   BOOL bRelative, BOOL bJunction);
@@ -43,7 +43,7 @@ static BOOL CreateLinkInternal(IN LPCWSTR sLinkName, IN LPCWSTR sPrintName, IN L
   DWORD dwLen;
 
   hHandle = OpenFileForWrite(sLinkName,
-    (GetFileAttributes(sLinkName) & FILE_ATTRIBUTE_DIRECTORY));
+    (GetFileAttributesW(sLinkName) & FILE_ATTRIBUTE_DIRECTORY));
 
   if (INVALID_HANDLE_VALUE == hHandle)
   {

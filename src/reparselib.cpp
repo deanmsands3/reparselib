@@ -5,9 +5,9 @@
  *  @date     May 2011
  */
 
-#include "include/stdafx.h"
+#include <stdafx.h>
 #include <ks.h> // because of GUID_NULL
-#include "include/reparselib.h"
+#include <reparselib.h>
 
 /**
  *@brief Get restore privilege in case we don't have it.
@@ -17,12 +17,12 @@ VOID ObtainRestorePrivilege(IN BOOL bReadWrite)
 {
   HANDLE hToken; TOKEN_PRIVILEGES tp;
   OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &hToken);
-  LookupPrivilegeValue(NULL,
+  LookupPrivilegeValue(nullptr,
     (bReadWrite ? SE_RESTORE_NAME : SE_BACKUP_NAME),
     &tp.Privileges[0].Luid);
   tp.PrivilegeCount = 1;
   tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-  AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), NULL, NULL);
+  AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), nullptr, nullptr);
   CloseHandle(hToken);
 }
 
@@ -32,8 +32,8 @@ HANDLE OpenFileForWrite(IN LPCWSTR sFileName, IN BOOL bBackup)
   {
     ObtainRestorePrivilege(TRUE);
   }
-  return CreateFile(
-    sFileName, GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+  return CreateFileW(
+    sFileName, GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, nullptr, OPEN_EXISTING,
     (bBackup)
     ? FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS
     : FILE_FLAG_OPEN_REPARSE_POINT, 0);
@@ -45,8 +45,8 @@ HANDLE OpenFileForRead(IN LPCWSTR sFileName, IN BOOL bBackup)
   {
     ObtainRestorePrivilege(FALSE);
   }
-  return CreateFile(
-    sFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
+  return CreateFileW(
+    sFileName, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING,
     (bBackup)
     ? FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS
     : FILE_FLAG_OPEN_REPARSE_POINT, 0);
@@ -66,7 +66,7 @@ REPARSELIB_API wchar_t *ConvertCharArrayToLPCWSTR(const char* charArray)
  */
 REPARSELIB_API BOOL ReparsePointExists(IN LPCWSTR sFileName)
 {
-  return (GetFileAttributes(sFileName) & FILE_ATTRIBUTE_REPARSE_POINT);
+  return (GetFileAttributesW(sFileName) & FILE_ATTRIBUTE_REPARSE_POINT);
 }
 
 /**
@@ -92,7 +92,7 @@ REPARSELIB_API BOOL GetReparseBuffer(IN LPCWSTR sFileName, OUT PREPARSE_GUID_DAT
   }
 
   hSrc = OpenFileForRead(sFileName,
-    (GetFileAttributes(sFileName) & FILE_ATTRIBUTE_DIRECTORY));
+    (GetFileAttributesW(sFileName) & FILE_ATTRIBUTE_DIRECTORY));
 
   if (hSrc == INVALID_HANDLE_VALUE)
   {
@@ -209,7 +209,7 @@ REPARSELIB_API BOOL DeleteReparsePoint(IN LPCWSTR sFileName)
   }
 
   HANDLE hDel = OpenFileForWrite(sFileName,
-    (GetFileAttributes(sFileName) & FILE_ATTRIBUTE_DIRECTORY));
+    (GetFileAttributesW(sFileName) & FILE_ATTRIBUTE_DIRECTORY));
 
   if (hDel == INVALID_HANDLE_VALUE)
   {
@@ -264,14 +264,14 @@ REPARSELIB_API BOOL CreateCustomReparsePoint
   }
 
   HANDLE hHandle = OpenFileForWrite(sFileName,
-    (GetFileAttributes(sFileName) & FILE_ATTRIBUTE_DIRECTORY));
+    (GetFileAttributesW(sFileName) & FILE_ATTRIBUTE_DIRECTORY));
 
   if (INVALID_HANDLE_VALUE == hHandle)
   {
     return bResult;
   }
 
-  PREPARSE_GUID_DATA_BUFFER rd
+  auto rd
     = (PREPARSE_GUID_DATA_BUFFER) GlobalAlloc(GPTR, MAXIMUM_REPARSE_DATA_BUFFER_SIZE);
   
   rd->ReparseTag = uReparseTag;
