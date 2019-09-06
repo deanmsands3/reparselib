@@ -7,6 +7,6 @@ set(REPARSELIB_HEADERS include/stdafx.h include/targetver.h include/reparseForGo
 set(REPARSELIB_SOURCES stdafx.cpp dllmain.cpp reparselib.cpp symlink.cpp)
 
 # Add main library
-add_library(${PROJECT_NAME} ${REPARSELIB_SOURCES})
+add_library(${PROJECT_NAME} SHARED ${REPARSELIB_SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE "-DREPARSELIB_EXPORTS")
